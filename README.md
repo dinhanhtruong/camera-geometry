@@ -1,7 +1,7 @@
 # Point Cloud Scene Reconstruction
 This is a program that reconstructs a point cloud of a scene given multi-view images using stereo & epipolar geometry. 
 
-![teaser](results_images/teaser.jpg)
+![teaser](results_images/teaser.png)
 
 ## Implementation Details
 In my implementation of RANSAC (used to estimate the best fundamental matrix), I used the distance of $x^TFx^′$ from 0 as the distance
@@ -27,3 +27,16 @@ percentage. However, for almost all image pairs, increasing the number of iterat
 within the first few hundred iterations.
 
 Before RANSAC
+
+![before ransac](results_images/matches.png)
+
+After 50 iterations of RANSAC at 0.025 threshold:
+
+![50 iters ransac](results_images/ransac_many.png)
+
+After 500 iterations of RANSAC at 0.025 threshold:
+
+![500 iters ransac](results_images/ransac_few.png)
+
+Final point cloud reconstruction:
+![point cloud](results_images/reconstruction.jpg)
