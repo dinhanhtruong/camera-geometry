@@ -5,7 +5,7 @@ import numpy as np
 
 from helpers import show_reprojections, get_matches, show_point_cloud, \
     get_markers, show_matches
-import student
+import core_logic
 
 
 def parse_args():
@@ -55,9 +55,9 @@ def main():
     # Getting dictionary of markerID to 4x3 array containing 3D points for each image
     markers = get_markers(os.path.join(args.data, "markers.txt"))
 
-    #Calling student's calculate_projection_matrix function on each image
+    #Calling calculate_projection_matrix function on each image
     print('Calculating projection matrices...')
-    Ms = [student.calculate_projection_matrix(image, markers) for image in images]
+    Ms = [core_logic.calculate_projection_matrix(image, markers) for image in images]
 
     if not args.no_intermediate_vis:
         show_reprojections(images, Ms, markers)
@@ -78,19 +78,19 @@ def main():
         if not args.no_intermediate_vis:
             show_matches(image1, image2, points1, points2)
 
-        # Obtain an estimated fundamental matrix (F) and inlier point pairs using student's ransac_fundamental_matrix
+        # Obtain an estimated fundamental matrix (F) and inlier point pairs using ransac_fundamental_matrix
         # by passing in proposed matching points calculated previously.
         print(f'Filtering with RANSAC...')
-        F, inliers1, inliers2 = student.ransac_fundamental_matrix(
+        F, inliers1, inliers2 = core_logic.ransac_fundamental_matrix(
             points1, points2, args.ransac_iters)
 
-        # Visualize student's matched inlier point pairs on the original images
+        # Visualize matched inlier point pairs on the original images
         if not args.no_intermediate_vis:
             show_matches(image1, image2, inliers1, inliers2)
 
-        # Uses student's matches_to_3d to infer the 3D points that inlier pairs correspond to
+        # Uses matches_to_3d to infer the 3D points that inlier pairs correspond to
         print('Calculating 3D points for accepted matches...')
-        points3d += student.matches_to_3d(inliers1, inliers2, M1, M2)
+        points3d += core_logic.matches_to_3d(inliers1, inliers2, M1, M2)
         points3d_color += [tuple(image1[int(point[1]), int(point[0]), :] / 255.0) for point in inliers1]
 
     # Visualize 3d points
